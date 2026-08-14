@@ -101,15 +101,19 @@ class _HomeScreenState extends State<HomeScreen> {
     double sum = 0;
     bool hasMatches = false;
 
-    final RegExp regex = RegExp(r'\(\s*[^\d]*([0-9]*[\.,]?[0-9]+)\s*([a-zA-Z万億亿千]*)[^\d]*\)');
+    // NÂNG CẤP REGEX: Bắt thêm phép nhân (dấu *, x, X hoặc × của điện thoại) và số lượng
+    final RegExp regex = RegExp(r'\(\s*[^\d]*([0-9]*[\.,]?[0-9]+)\s*([a-zA-Z万億亿千]*)(?:\s*[\*xX×]\s*([0-9]+))?[^\d]*\)');
     final matches = regex.allMatches(text);
 
     for (final match in matches) {
       String numberStr = match.group(1)!;
       String rawSuffix = match.group(2)!; 
       String suffixLower = rawSuffix.toLowerCase();
-      double? val;
+      
+      // Lấy số lượng (nếu người dùng có gõ phép nhân), mặc định là 1 phần
+      String multiplierStr = match.group(3) ?? '1'; 
 
+      double? val;
       numberStr = numberStr.replaceAll(',', '.');
 
       if (isDecimalAllowed) {
@@ -123,6 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
       if (val != null) {
+        // Xử lý đơn vị tiền tệ theo ngôn ngữ
         if (vm.currentLanguage == 'vi') {
           if (suffixLower == 'k') val *= 1000;
           else if (suffixLower == 'tr' || rawSuffix == 'M') val *= 1000000; 
@@ -147,6 +152,10 @@ class _HomeScreenState extends State<HomeScreen> {
           else if (rawSuffix == 'M') val *= 1000000;
           else if (rawSuffix == 'B') val *= 1000000000;
         }
+
+        // NÂNG CẤP: Nhân giá trị với số lượng món đồ
+        double multiplier = double.tryParse(multiplierStr) ?? 1.0;
+        val *= multiplier;
 
         sum += val;
         hasMatches = true;
