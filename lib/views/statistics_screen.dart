@@ -5,6 +5,10 @@ import 'package:intl/intl.dart';
 import '../viewmodels/expense_viewmodel.dart';
 import '../models/currency_input_formatter.dart';
 
+// Giao diện Thống kê & Thị trường:
+// Cung cấp công cụ chuyển đổi ngoại tệ trực tiếp với tính năng đảo chiều và tự động đồng bộ theo ngôn ngữ.
+// Cập nhật thông tin thị trường (Bitcoin, Vàng) và hiển thị biểu đồ đường (Line Chart) so sánh thu/chi theo từng năm.
+// Tổng hợp báo cáo tổng quan về hoạt động chi tiêu và thu nhập của tháng hiện tại.
 class StatisticsScreen extends StatefulWidget {
   const StatisticsScreen({super.key});
 
@@ -18,7 +22,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   String _toCurrency = 'USD';
   double _convertedResult = 0;
   
-  // Biến dùng để theo dõi sự thay đổi ngôn ngữ
   String _lastLanguage = ''; 
 
   final Map<String, String> currencySymbols = {
@@ -70,9 +73,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   Widget build(BuildContext context) {
     final viewModel = context.watch<ExpenseViewModel>();
 
-    // =======================================================================
-    // TỰ ĐỘNG ĐỒNG BỘ CẶP TIỀN TỆ THEO NGÔN NGỮ
-    // =======================================================================
+    // Tự động đồng bộ cặp tiền tệ theo ngôn ngữ
     if (_lastLanguage != viewModel.currentLanguage) {
       _lastLanguage = viewModel.currentLanguage;
       
@@ -90,7 +91,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         _toCurrency = 'VND';
       }
 
-      // Ép hệ thống tính toán lại ngay khi vừa đổi ngôn ngữ
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) _convertCurrency(viewModel);
       });
@@ -132,7 +132,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         const SizedBox(width: 8),
                         Expanded(
                           child: DropdownButtonFormField<String>(
-                            value: _fromCurrency,
+                            initialValue: _fromCurrency,
                             decoration: InputDecoration(border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
                             items: currencySymbols.keys.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
                             onChanged: (val) {
@@ -144,9 +144,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    // =======================================================================
-                    // NÚT ĐẢO CHIỀU (HOẠT ĐỘNG 100%)
-                    // =======================================================================
+                    // Nút đảo chiều
                     IconButton(
                       icon: const Icon(Icons.swap_vert, color: Colors.teal, size: 28),
                       onPressed: () {
@@ -178,7 +176,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         const SizedBox(width: 8),
                         Expanded(
                           child: DropdownButtonFormField<String>(
-                            value: _toCurrency,
+                            initialValue: _toCurrency,
                             decoration: InputDecoration(border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
                             items: currencySymbols.keys.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
                             onChanged: (val) {

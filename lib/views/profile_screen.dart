@@ -4,6 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../viewmodels/expense_viewmodel.dart';
 
+// Giao diện Hồ sơ cá nhân (Profile Screen):
+// Hiển thị thông tin người dùng, ảnh đại diện (tích hợp tải ảnh từ thư viện) và trạng thái gói thành viên hiện tại.
+// Cung cấp giao diện quản lý liên kết ví điện tử/ngân hàng và xử lý thao tác đăng xuất an toàn.
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
@@ -13,7 +16,6 @@ class ProfileScreen extends StatelessWidget {
     final currentPlan = viewModel.currentPlan;
     final avatarPath = viewModel.avatarPath;
 
-    // XỬ LÝ DỊCH THUẬT TÊN GÓI ĐANG DÙNG
     String currentPlanKey = currentPlan; 
     if (currentPlan.contains('Cơ bản')) currentPlanKey = 'plan_basic';
     else if (currentPlan.contains('Thành viên')) currentPlanKey = 'plan_member';
@@ -101,7 +103,6 @@ class ProfileScreen extends StatelessWidget {
             
             const SizedBox(height: 40),
 
-            // KẾT NỐI TÀI CHÍNH
             Align(
               alignment: Alignment.centerLeft,
               child: Text(viewModel.getText('finance_payment'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey)),

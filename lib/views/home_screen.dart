@@ -7,6 +7,9 @@ import 'chart.dart';
 import 'package:intl/intl.dart'; 
 import '../models/currency_input_formatter.dart'; 
 
+// Giao diện Trang chủ (Home Screen) hiển thị tổng quan thu/chi và biểu đồ thống kê:
+// Tích hợp máy tính nhẩm nhanh với thuật toán bóc tách chuỗi thông minh từ văn bản (hỗ trợ đa ngôn ngữ).
+// Quản lý danh sách giao dịch nhóm theo tháng, bộ lọc danh mục, thanh tìm kiếm và hiển thị thông báo hệ thống.
 class _StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
   final double minHeight;
   final double maxHeight;
@@ -82,9 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  // =======================================================================
-  // HÀM QUÉT THÔNG MINH (ĐÃ BỔ SUNG ĐƠN VỊ 1000 CHO TRUNG VÀ NHẬT)
-  // =======================================================================
+  // Hàm quét thông minh bóc tách số tiền từ chuỗi (Hỗ trợ đơn vị tiền tệ đa quốc gia)
   void _autoCalculateFromNotes(String text) {
     if (!text.contains('(') && !text.contains(')')) {
       if (_itemAmountController.text.isNotEmpty) {
@@ -100,7 +101,6 @@ class _HomeScreenState extends State<HomeScreen> {
     double sum = 0;
     bool hasMatches = false;
 
-    // Bổ sung ký tự 千 (Thiên) và 亿 (Ức giản thể) vào Regex
     final RegExp regex = RegExp(r'\(\s*[^\d]*([0-9]*[\.,]?[0-9]+)\s*([a-zA-Z万億亿千]*)[^\d]*\)');
     final matches = regex.allMatches(text);
 
@@ -134,7 +134,6 @@ class _HomeScreenState extends State<HomeScreen> {
           else if (rawSuffix == 'B') val *= 1000000000; 
         } 
         else if (vm.currentLanguage == 'zh') {
-          // Bổ sung 'q' và '千' cho 1000 của Trung Quốc
           if (suffixLower == 'q' || rawSuffix == '千' || suffixLower == 'k') val *= 1000;
           else if (suffixLower == 'w' || rawSuffix == '万') val *= 10000; 
           else if (suffixLower == 'y' || rawSuffix == '亿' || rawSuffix == '億') val *= 100000000; 
@@ -142,7 +141,6 @@ class _HomeScreenState extends State<HomeScreen> {
           else if (rawSuffix == 'B') val *= 1000000000;
         } 
         else if (vm.currentLanguage == 'ja') {
-          // Bổ sung 's' và '千' cho 1000 của Nhật Bản
           if (suffixLower == 's' || rawSuffix == '千' || suffixLower == 'k') val *= 1000;
           else if (suffixLower == 'w' || rawSuffix == '万') val *= 10000; 
           else if (suffixLower == 'y' || rawSuffix == '億') val *= 100000000; 
@@ -317,11 +315,9 @@ class _HomeScreenState extends State<HomeScreen> {
         smartHintLabel = '$baseHint e.g. Hamburger (\$1.50),(1k),(1M),(1B)'; 
         break;
       case 'zh':
-        // Cập nhật gợi ý cho Tiếng Trung (Thêm q và 千)
         smartHintLabel = '$baseHint 例如: 汉堡 (¥25.50),(1q/千),(1w/万),(1y/亿)'; 
         break;
       case 'ja':
-        // Cập nhật gợi ý cho Tiếng Nhật (Thêm s và 千)
         smartHintLabel = '$baseHint 例: 弁当 (¥500),(1s/千),(1w/万),(1y/億)'; 
         break;
       case 'vi':

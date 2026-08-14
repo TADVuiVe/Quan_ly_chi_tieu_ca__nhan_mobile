@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // THƯ VIỆN ĐỂ CHẶN DẤU CÁCH VÀ KÝ TỰ LẠ
+import 'package:flutter/services.dart'; 
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../viewmodels/expense_viewmodel.dart';
 
+// Giao diện Đăng ký tài khoản mới:
+// Cung cấp biểu mẫu nhập liệu với tính năng kiểm tra tính hợp lệ của mật khẩu (độ dài, chữ hoa, chữ thường, số, ký tự đặc biệt).
+// Tích hợp bộ lọc chặn khoảng trắng và ký tự tiếng Việt có dấu.
+// Xử lý logic kiểm tra trùng lặp và lưu thông tin tài khoản mới thông qua ViewModel.
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
@@ -19,9 +23,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _obscurePassword = true;
   bool _obscureConfirm = true;
 
-  // HÀM KIỂM TRA MẬT KHẨU SIÊU BẢO MẬT
   bool isValidPassword(String password) {
-    // Độ dài 6-15, ít nhất 1 Hoa, 1 Thường, 1 Số, 1 Ký tự đặc biệt
     final regex = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,15}$');
     return regex.hasMatch(password);
   }
@@ -89,14 +91,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const Icon(Icons.app_registration, size: 80, color: Colors.teal),
                 const SizedBox(height: 24),
                 
-                // Ô NHẬP TÊN ĐĂNG NHẬP
                 TextField(
                   controller: _usernameController,
-                  keyboardType: TextInputType.visiblePassword, // Tắt gõ Tiếng Việt
+                  keyboardType: TextInputType.visiblePassword, 
                   enableSuggestions: false,
                   autocorrect: false,
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[\x21-\x7E]')), // Chặn khoảng trắng
+                    FilteringTextInputFormatter.allow(RegExp(r'[\x21-\x7E]')), 
                   ],
                   decoration: const InputDecoration(
                     labelText: 'Tên đăng nhập', 
@@ -107,16 +108,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SizedBox(height: 16),
                 
-                // Ô NHẬP MẬT KHẨU
                 TextField(
                   controller: _passwordController,
                   obscureText: _obscurePassword,
                   style: const TextStyle(color: Colors.black87),
-                  keyboardType: TextInputType.visiblePassword, // Tắt gõ Tiếng Việt
+                  keyboardType: TextInputType.visiblePassword, 
                   enableSuggestions: false,
                   autocorrect: false,
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[\x21-\x7E]')), // Chặn khoảng trắng
+                    FilteringTextInputFormatter.allow(RegExp(r'[\x21-\x7E]')), 
                   ],
                   decoration: InputDecoration(
                     labelText: 'Mật khẩu', 
@@ -133,16 +133,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const Text('* Yêu cầu: 6-15 ký tự, 1 Hoa, 1 Thường, 1 Số, 1 Đặc biệt', style: TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 16),
                 
-                // Ô XÁC NHẬN MẬT KHẨU
                 TextField(
                   controller: _confirmPasswordController,
                   obscureText: _obscureConfirm,
                   style: const TextStyle(color: Colors.black87),
-                  keyboardType: TextInputType.visiblePassword, // Tắt gõ Tiếng Việt
+                  keyboardType: TextInputType.visiblePassword, 
                   enableSuggestions: false,
                   autocorrect: false,
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[\x21-\x7E]')), // Chặn khoảng trắng
+                    FilteringTextInputFormatter.allow(RegExp(r'[\x21-\x7E]')), 
                   ],
                   decoration: InputDecoration(
                     labelText: 'Xác nhận mật khẩu', 

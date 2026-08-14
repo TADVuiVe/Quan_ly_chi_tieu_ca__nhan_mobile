@@ -3,6 +3,9 @@ import 'package:provider/provider.dart';
 import '../viewmodels/expense_viewmodel.dart';
 import '../models/expense.dart'; 
 
+// Hiển thị biểu đồ cột thống kê thu/chi của 5 ngày gần nhất:
+// Tự động tính toán tỷ lệ để vẽ chiều cao cột dựa trên giao dịch có giá trị lớn nhất.
+// Hỗ trợ thao tác nhấn giữ (Long Press) vào từng ngày để hiển thị hộp thoại chi tiết (tổng thu, chi và số dư).
 class Chart extends StatelessWidget {
   const Chart({super.key, required this.expenses});
 

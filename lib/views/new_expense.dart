@@ -5,6 +5,10 @@ import '../models/expense.dart';
 import '../viewmodels/expense_viewmodel.dart';
 import '../models/currency_input_formatter.dart'; 
 
+// Giao diện thêm mới giao dịch thu/chi (Bottom Sheet Form):
+// Cung cấp biểu mẫu nhập liệu với các trường: Lý do, Số tiền, Loại giao dịch và Danh mục.
+// Xử lý xác thực dữ liệu đầu vào và tự động hiển thị danh mục phù hợp theo loại giao dịch.
+// Tự động nhận diện định dạng thập phân và quy đổi ngoại tệ về tiền tệ gốc (VND) trước khi lưu.
 class NewExpense extends StatefulWidget {
   const NewExpense({super.key});
 
@@ -22,7 +26,6 @@ class _NewExpenseState extends State<NewExpense> {
   void _submitExpenseData() {
     final vm = context.read<ExpenseViewModel>();
     
-    // FIX TẠI ĐÂY: Loại bỏ replaceAll('.', '') để giữ lại dấu chấm thập phân
     final rawAmount = _amountController.text.replaceAll(',', '');
     final enteredAmount = double.tryParse(rawAmount);
     
@@ -47,7 +50,6 @@ class _NewExpenseState extends State<NewExpense> {
 
     final finalCategory = _selectedType == TransactionType.income ? Category.receive : _selectedCategory;
 
-    // DỊCH NGƯỢC TIỀN NGOẠI TỆ VỀ VND TRƯỚC KHI LƯU VÀO CSDL
     final amountToSave = vm.convertToBaseCurrency(enteredAmount);
 
     Navigator.pop(
@@ -83,7 +85,6 @@ class _NewExpenseState extends State<NewExpense> {
       _selectedCategory = Category.food;
     }
 
-    // ĐÃ TRẢ LẠI ĐUÔI TIỀN TỆ ĐỘNG CHO NGƯỜI DÙNG QUỐC TẾ
     String suffixCurrency = 'VND';
     if (vm.currentLanguage == 'en') suffixCurrency = 'USD';
     else if (vm.currentLanguage == 'zh') suffixCurrency = 'CNY';
@@ -138,10 +139,9 @@ class _NewExpenseState extends State<NewExpense> {
                   child: TextField(
                     controller: _amountController,
                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                    // Truyền ngôn ngữ vào Formatter để nó biết lúc nào được phép gõ số thập phân
                     inputFormatters: [CurrencyInputFormatter(languageCode: vm.currentLanguage)], 
                     decoration: InputDecoration(
-                      suffixText: suffixCurrency, // ĐUÔI TIỀN TỆ LINH HOẠT THEO NGÔN NGỮ
+                      suffixText: suffixCurrency,
                       label: Text(isExpense ? vm.getText('amount_expense') : vm.getText('amount_income')),
                     ),
                   ),

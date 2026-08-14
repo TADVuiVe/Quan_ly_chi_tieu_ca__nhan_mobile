@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/expense_viewmodel.dart';
 
+// Giao diện màn hình Danh mục & Cài đặt hệ thống:
+// Quản lý hiển thị các tính năng nâng cao: Nâng cấp gói thành viên, Liên kết tài khoản, Bảo mật và Đổi ngôn ngữ.
+// Cung cấp giao diện dọn dẹp bộ nhớ (xóa dữ liệu cũ) và thiết lập ứng dụng (Dark Mode, Thông báo).
+// Xử lý logic hiển thị cảnh báo chặn thao tác khi người dùng đang ở chế độ Offline.
 class CategoryScreen extends StatelessWidget {
   const CategoryScreen({super.key});
 
@@ -41,7 +45,7 @@ class CategoryScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          // ================= GÓI THÀNH VIÊN =================
+          // Nâng cấp gói thành viên
           Card(
             elevation: 4,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -77,7 +81,7 @@ class CategoryScreen extends StatelessWidget {
           Text(viewModel.getText('system'), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.grey)),
           const SizedBox(height: 8),
 
-          // ================= 1. QUẢN LÝ BỘ NHỚ =================
+          // 1. Quản lý bộ nhớ
           Card(
             elevation: 2,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -113,7 +117,7 @@ class CategoryScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          // ================= 2. CÀI ĐẶT HỆ THỐNG =================
+          // 2. Cài đặt hệ thống
           Card(
             elevation: 2,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -139,7 +143,7 @@ class CategoryScreen extends StatelessWidget {
                               Text(vm.getText('system_settings'), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                               const SizedBox(height: 24),
                               SwitchListTile(
-                                activeColor: Colors.teal,
+                                activeThumbColor: Colors.teal,
                                 title: Text(vm.getText('dark_mode')),
                                 secondary: Icon(vm.isDarkMode ? Icons.dark_mode : Icons.light_mode, color: vm.isDarkMode ? Colors.purpleAccent : Colors.orange),
                                 value: vm.isDarkMode,
@@ -147,7 +151,7 @@ class CategoryScreen extends StatelessWidget {
                               ),
                               const Divider(),
                               SwitchListTile(
-                                activeColor: Colors.teal,
+                                activeThumbColor: Colors.teal,
                                 title: Text(vm.getText('notifications')),
                                 secondary: Icon(vm.isNotificationEnabled ? Icons.notifications_active : Icons.notifications_off, color: Colors.blue),
                                 value: vm.isNotificationEnabled,
@@ -166,7 +170,7 @@ class CategoryScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          // ================= 3. LIÊN KẾT TÀI KHOẢN =================
+          // 3. Liên kết tài khoản
           Card(
             elevation: 2,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -186,7 +190,7 @@ class CategoryScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          // ================= 4. BẢO MẬT TÀI KHOẢN =================
+          // 4. Bảo mật tài khoản
           Card(
             elevation: 2,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -206,7 +210,7 @@ class CategoryScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          // ================= 5. NGÔN NGỮ (ĐÃ MỞ KHÓA OFFLINE) =================
+          // 5. Cài đặt ngôn ngữ (Hỗ trợ Offline)
           Card(
             elevation: 2,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -216,14 +220,13 @@ class CategoryScreen extends StatelessWidget {
               title: Text(viewModel.getText('language'), style: const TextStyle(fontWeight: FontWeight.bold)),
               trailing: const Icon(Icons.arrow_forward_ios, size: 16),
               onTap: () {
-                // Xóa lệnh kiểm tra Offline ở đây, chạy thẳng hàm gọi bảng Ngôn Ngữ
                 _showLanguageBottomSheet(context, viewModel);
               },
             ),
           ),
           const SizedBox(height: 12),
 
-          // ================= 6. ĐIỀU KHOẢN VÀ CHÍNH SÁCH =================
+          // 6. Điều khoản và chính sách
           Card(
             elevation: 2,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),

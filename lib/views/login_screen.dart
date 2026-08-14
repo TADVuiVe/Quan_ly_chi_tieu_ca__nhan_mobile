@@ -4,6 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../viewmodels/expense_viewmodel.dart';
 
+// Giao diện Đăng nhập và xác thực người dùng:
+// Xử lý kiểm tra thông tin tài khoản, mật khẩu và điều hướng vào màn hình chính.
+// Cung cấp tùy chọn "Chế độ Offline" để trải nghiệm app mà không cần đăng nhập.
+// Tích hợp bộ lọc bảo mật chặn khoảng trắng và ký tự tiếng Việt có dấu ở các ô nhập liệu.
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -64,14 +68,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 const Text('QUẢN LÝ CHI TIÊU', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, letterSpacing: 2, color: Colors.teal)),
                 const SizedBox(height: 40),
                 
-                // Ô NHẬP TÊN ĐĂNG NHẬP
+                // Ô nhập tên đăng nhập
                 TextField(
                   controller: _usernameController,
                   keyboardType: TextInputType.visiblePassword,
                   enableSuggestions: false,
                   autocorrect: false,
                   inputFormatters: [
-                    // KHIÊN BẤT TỬ: CHỈ CHO PHÉP ASCII CƠ BẢN. CHẶN KHOẢNG TRẮNG & TIẾNG VIỆT
+                    // Chỉ cho phép ASCII cơ bản, chặn khoảng trắng & tiếng Việt
                     FilteringTextInputFormatter.allow(RegExp(r'[\x21-\x7E]')), 
                   ],
                   decoration: const InputDecoration(
@@ -83,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 16),
                 
-                // Ô NHẬP MẬT KHẨU
+                // Ô nhập mật khẩu
                 TextField(
                   controller: _passwordController,
                   obscureText: _obscurePassword,
@@ -91,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   enableSuggestions: false,
                   autocorrect: false,
                   inputFormatters: [
-                    // KHIÊN BẤT TỬ: CHỈ CHO PHÉP ASCII CƠ BẢN. CHẶN KHOẢNG TRẮNG & TIẾNG VIỆT
+                    // Chỉ cho phép ASCII cơ bản, chặn khoảng trắng & tiếng Việt
                     FilteringTextInputFormatter.allow(RegExp(r'[\x21-\x7E]')), 
                   ],
                   decoration: InputDecoration(

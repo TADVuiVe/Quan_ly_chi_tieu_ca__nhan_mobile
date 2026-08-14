@@ -1,3 +1,6 @@
+# Tệp cấu hình dự án Flutter (pubspec.yaml):
+# Quản lý thông tin dự án, phiên bản SDK và cấu hình thay đổi icon ứng dụng.
+# Khai báo các gói thư viện cốt lõi: quản lý trạng thái (provider), điều hướng (go_router), lưu trữ cục bộ (hive), gọi API (http), vẽ biểu đồ (fl_chart), và các tiện ích khác (intl, image_picker).
 name: quan_ly_chi_tieu
 description: Do an Quan ly chi tieu ca nhan.
 publish_to: 'none'
@@ -9,40 +12,24 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-    
-    # THÊM DÒNG NÀY ĐỂ HẾT BÁO LỖI TIỀN TỆ VÀ NGÀY THÁNG
   intl: ^0.19.0
-    
-  # Yêu cầu 2: Điều hướng ứng dụng
   go_router: ^14.2.0 
-  
-  # Yêu cầu 3: Quản lý trạng thái
   provider: ^6.1.5+1
-  
-  # Yêu cầu 5: Cơ sở dữ liệu cục bộ
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-  
-  # Yêu cầu 6: Kết nối REST API
   http: ^1.6.0
-  
-  # Yêu cầu 7: Tính năng thiết bị
   image_picker: ^1.2.3
-  
-  # Yêu cầu 8: Hiệu ứng chuyển động
   flutter_animate: ^4.5.0
   shared_preferences: ^2.5.5
   uuid: ^4.6.0
   fl_chart: ^1.2.0
 
-# THÊM MỚI: Thư viện hỗ trợ đổi icon
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
 
-# THÊM MỚI: Cấu hình đường dẫn ảnh icon
 flutter_icons:
   android: true
   ios: true

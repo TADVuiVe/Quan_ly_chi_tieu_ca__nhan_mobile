@@ -2,6 +2,10 @@ import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';  
 
+// Định nghĩa mô hình dữ liệu nền tảng cho một giao dịch thu/chi:
+// Quản lý danh sách các danh mục (Category), loại giao dịch (TransactionType) kèm Icon và tên hiển thị tương ứng.
+// Tự động tạo ID độc nhất (UUID) và định dạng số tiền sang chuẩn VNĐ.
+// Cung cấp hàm chuyển đổi (toJson/fromJson) để đóng gói và đọc dữ liệu khi lưu trữ (Database/Local Storage).
 const uuid = Uuid();
 
 enum Category { food, travel, leisure, work, receive }
@@ -23,7 +27,6 @@ const categoryNames = {
   Category.receive: 'Nhận', 
 };
 
-// ĐÃ ĐỔI TỪ "đ" SANG "VND" ĐƯỢC CÁCH RA 1 KHOẢNG TRẮNG
 final currencyFormatter = NumberFormat.currency(
   locale: 'vi_VN', 
   customPattern: '#,##0 VND', 

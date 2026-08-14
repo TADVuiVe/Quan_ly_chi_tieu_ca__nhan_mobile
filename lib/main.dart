@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-
 import 'viewmodels/expense_viewmodel.dart';
 import 'views/login_screen.dart';
 import 'views/main_navigation.dart';
-import 'views/register_screen.dart'; // THÊM IMPORT TRANG ĐĂNG KÝ MỚI
+import 'views/register_screen.dart';
 
-// --- ĐỊNH NGHĨA 2 BẢNG MÀU CHỦ ĐẠO (SÁNG / TỐI) ---
+// Điểm bắt đầu (Entry point) của ứng dụng:
+// Khởi tạo cơ sở dữ liệu cục bộ (Hive) và hệ thống quản lý trạng thái toàn cục (Provider).
+// Cấu hình bộ định tuyến (GoRouter) để điều hướng giữa Đăng nhập, Đăng ký và màn hình chính.
+// Thiết lập giao diện tổng thể (ThemeData) hỗ trợ chuyển đổi mượt mà giữa chế độ Sáng và Tối (Dark Mode).
 final kColorScheme = ColorScheme.fromSeed(
   seedColor: Colors.teal,
 );
@@ -18,7 +20,6 @@ final kDarkColorScheme = ColorScheme.fromSeed(
   seedColor: Colors.teal,
 );
 
-// --- ĐƯA ĐIỀU HƯỚNG RA NGOÀI ĐỂ KHÔNG BỊ RESET VỀ ĐĂNG NHẬP ---
 final _router = GoRouter(
   initialLocation: '/',
   routes: [
@@ -26,7 +27,6 @@ final _router = GoRouter(
       path: '/',
       builder: (context, state) => const LoginScreen(),
     ),
-    // THÊM ĐOẠN NÀY ĐỂ CHUYỂN SANG TRANG ĐĂNG KÝ
     GoRoute(
       path: '/register',
       builder: (context, state) => const RegisterScreen(),
@@ -41,7 +41,6 @@ final _router = GoRouter(
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Khởi tạo Cơ sở dữ liệu Hive
   await Hive.initFlutter();
   await Hive.openBox('expense_box');
 
@@ -58,14 +57,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Lắng nghe trạng thái bật/tắt từ công tắc Dark Mode
     final isDarkMode = context.watch<ExpenseViewModel>().isDarkMode;
 
     return MaterialApp.router(
       title: 'Quản Lý Chi Tiêu',
       debugShowCheckedModeBanner: false,
       
-      // --- CẤU HÌNH GIAO DIỆN SÁNG ---
       theme: ThemeData().copyWith(
         colorScheme: kColorScheme,
         appBarTheme: const AppBarTheme().copyWith(
@@ -75,7 +72,6 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: kColorScheme.surface,
       ),
       
-      // --- CẤU HÌNH GIAO DIỆN TỐI (DARK MODE) ---
       darkTheme: ThemeData.dark().copyWith(
         colorScheme: kDarkColorScheme,
         appBarTheme: const AppBarTheme().copyWith(
@@ -85,7 +81,6 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: kDarkColorScheme.surface,
       ),
       
-      // --- CÔNG TẮC ĐIỀU KHIỂN TỰ ĐỘNG ---
       themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
       
       routerConfig: _router,

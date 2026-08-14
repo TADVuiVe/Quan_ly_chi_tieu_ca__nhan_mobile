@@ -1,6 +1,10 @@
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
+// Tự động định dạng số tiền khi nhập liệu theo thời gian thực:
+// Thêm phân cách hàng nghìn (VD: 1.000.000 hoặc 1,000,000).
+// Thay đổi luật nhập liệu theo ngôn ngữ: Tiếng Việt (chỉ nhập số nguyên, phân cách bằng dấu chấm), Tiếng Anh/Trung (cho phép 2 số thập phân, phân cách bằng dấu phẩy).
+// Chặn ký tự lạ và ngăn người dùng gõ sai cú pháp thập phân.
 class CurrencyInputFormatter extends TextInputFormatter {
   final String languageCode;
 
@@ -35,15 +39,12 @@ class CurrencyInputFormatter extends TextInputFormatter {
       try {
         int value = int.parse(wholeNumber);
         
-        // Mặc định tạo format quốc tế (dấu phẩy)
         wholeNumber = NumberFormat('#,###', 'en_US').format(value);
         
-        // NẾU LÀ TIẾNG VIỆT -> Hoán đổi toàn bộ phẩy thành chấm
         if (isVi) {
           wholeNumber = wholeNumber.replaceAll(',', '.');
         }
       } catch (e) {
-        // Ignored
       }
     }
 

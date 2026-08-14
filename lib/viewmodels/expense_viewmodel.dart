@@ -5,8 +5,12 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import '../models/expense.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart'; // THÊM DÒNG NÀY ĐỂ FIX LỖI NUMBERFORMAT
+import 'package:intl/intl.dart';
 
+// Quản lý trạng thái và toàn bộ logic cốt lõi của ứng dụng (ViewModel):
+// Lưu trữ & Xử lý dữ liệu (Hive): Thêm/đọc giao dịch, lọc tìm kiếm, tính toán thống kê biểu đồ và nén/giải phóng dữ liệu cũ.
+// Đa ngôn ngữ & Tiền tệ: Cung cấp từ điển dịch thuật, gọi API lấy tỷ giá thị trường thực tế và tự động quy đổi ngoại tệ.
+// Hệ thống & Tài khoản: Quản lý đăng nhập, Offline Mode, Dark Mode, Avatar, Thông báo bảo mật và Gói thành viên.
 const Map<String, Map<String, String>> appTranslations = {
   'vi': {
     'category_title': 'Danh mục & Cài đặt', 'upgrade_account': 'Nâng cấp Tài khoản', 'current_plan': 'Gói hiện tại: ', 'system': 'Hệ thống', 'memory_management': 'Quản lý bộ nhớ', 'used': 'Đã dùng: ', 'warning_delete': 'Cảnh báo xóa', 'warning_msg': 'Thao tác này sẽ xoá TOÀN BỘ chi/thu của các ngày/tháng/năm trước.\nBạn có chắc chắn?', 'cancel': 'Hủy', 'confirm_delete': 'Chắc chắn xóa', 'delete_success': 'Đã giải phóng thành công dữ liệu cũ!', 'system_settings': 'Cài đặt hệ thống', 'dark_mode': 'Giao diện nền tối (Dark Mode)', 'notifications': 'Thông báo chi/thu (Chạy nền & Màn hình khóa)', 'link_account': 'Liên kết tài khoản', 'link_desc': 'Kết nối để bảo vệ tài khoản và đồng bộ dữ liệu', 'not_linked': 'Chưa liên kết', 'link_btn': 'Liên kết', 'security': 'Bảo mật tài khoản', 'security_center': 'Trung tâm Bảo mật', 'security_desc': 'Nâng cấp các lớp bảo vệ tài chính của bạn', '2fa': 'Bảo mật 2 lớp (2FA)', '2fa_desc': 'Xác thực qua mã OTP gửi tới SMS hoặc Email.', 'biometric': 'Bảo mật Sinh trắc học', 'biometric_desc': 'Sử dụng Vân tay hoặc Khuôn mặt để đăng nhập an toàn.', 'fido': 'Khóa Vật lý (FIDO2 / Passkey)', 'fido_desc': 'Chuẩn bảo mật cao nhất, chống lừa đảo 100%.', 'turn_on': 'Bật', 'language': 'Ngôn ngữ', 'lang_desc': 'Chọn ngôn ngữ hiển thị cho ứng dụng', 'policy': 'Điều khoản và chính sách', 'in_use': 'Đang sử dụng', 'dev_feature': 'Tính năng đang được phát triển', 'phone': 'Số điện thoại',
@@ -66,9 +70,7 @@ class ExpenseViewModel extends ChangeNotifier {
   List<Expense> _registeredExpenses = [];
   final _myBox = Hive.box('expense_box');
 
-  // ==========================================================
   // HỆ THỐNG ĐA NGÔN NGỮ VÀ QUY ĐỔI TIỀN TỆ
-  // ==========================================================
   String _currentLanguage = 'vi';
   String get currentLanguage => _currentLanguage;
 
@@ -104,9 +106,7 @@ class ExpenseViewModel extends ChangeNotifier {
     return NumberFormat.currency(locale: locale, customPattern: pattern, decimalDigits: decimals).format(convertedAmount).trim();
   }
 
-  // ==========================================================
   // HỆ THỐNG THÔNG BÁO BẢO MẬT & CHẤM ĐỎ
-  // ==========================================================
   List<String> _notifications = [];
   int _unreadNotiCount = 0;
 
@@ -132,9 +132,7 @@ class ExpenseViewModel extends ChangeNotifier {
     _myBox.put('unread_noti_count', _unreadNotiCount);
   }
 
-  // ==========================================================
   // XỬ LÝ ĐĂNG NHẬP, ĐĂNG KÝ & OFFLINE MODE
-  // ==========================================================
   bool _isOfflineMode = false;
   String _currentUser = '';
 
@@ -175,7 +173,7 @@ class ExpenseViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // --- 1. DỮ LIỆU THỊ TRƯỜNG & TỶ GIÁ ---
+  // DỮ LIỆU THỊ TRƯỜNG & TỶ GIÁ
   bool _isLoadingMarket = false;
   Map<String, double> _exchangeRates = {'USD': 1.0, 'VND': 25000, 'EUR': 0.9, 'JPY': 150, 'CNY': 7.2};
   
@@ -449,7 +447,6 @@ class ExpenseViewModel extends ChangeNotifier {
       double rateVnd = _exchangeRates['VND']!;
       double rateTarget = _exchangeRates[targetCurrency]!;
       
-      // Công thức tính ngược: (Số tiền ngoại tệ / Tỷ giá ngoại tệ) * Tỷ giá VND
       return (inputAmount / rateTarget) * rateVnd; 
     }
     return inputAmount;
