@@ -25,9 +25,17 @@ class _NewExpenseState extends State<NewExpense> {
 
   void _submitExpenseData() {
     final vm = context.read<ExpenseViewModel>();
+
+    String rawAmount = _amountController.text;
     
-    final rawAmount = _amountController.text.replaceAll(',', '');
+    if (vm.currentLanguage == 'vi') {
+      rawAmount = rawAmount.replaceAll('.', '');
+    } else {
+      rawAmount = rawAmount.replaceAll(',', '');
+    }
+    
     final enteredAmount = double.tryParse(rawAmount);
+    // -------------------------------------------------------------
     
     final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
 
