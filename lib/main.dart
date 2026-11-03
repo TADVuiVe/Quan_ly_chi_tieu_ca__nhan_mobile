@@ -6,8 +6,6 @@ import 'viewmodels/expense_viewmodel.dart';
 import 'views/login_screen.dart';
 import 'views/main_navigation.dart';
 import 'views/register_screen.dart';
-import 'views/welcome_screen.dart';
-
 // Điểm bắt đầu (Entry point) của ứng dụng:
 // Khởi tạo cơ sở dữ liệu cục bộ (Hive) và hệ thống quản lý trạng thái toàn cục (Provider).
 // Cấu hình bộ định tuyến (GoRouter) để điều hướng giữa Đăng nhập, Đăng ký và màn hình chính.
@@ -22,12 +20,7 @@ final kDarkColorScheme = ColorScheme.fromSeed(
 );
 
 final _router = GoRouter(
-  initialLocation: '/welcome', // sau này xóa
   routes: [
-    GoRoute(
-      path: '/welcome',
-      builder: (context, state) => const WelcomeScreen(),
-    ),// sau này xóa
     GoRoute(
       path: '/',
       builder: (context, state) => const LoginScreen(),
